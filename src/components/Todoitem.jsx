@@ -4,28 +4,45 @@ import db from "../firebase/firebase";
 
 const INITIAL_STATE = {
   toDelete: "",
+  date: "",
+  time: "",
+  message: "",
+};
+
+let style = {
+  border: "3.5px solid black",
+ position: "absolute",
+ zIndex: "1",
+  backgroundColor: "white",
+  borderRadius: "0 30px 30px 0",
+  marginTop: "50px",
+  fontFamily: "fantasy",
+  padding: "10px",
+  overflowY: "scroll",
+  height: "15rem",
+  width: "70%",
+  
 };
 export default class Todoitem extends Component {
   state = { ...INITIAL_STATE };
 
   onDeleteTodo(temp) {
-    console.log(temp);
-    if (
-      window.confirm(
-        "Are You sure you want to delete this todo :("
-      )
-    ) {
+    
+    if (window.confirm("Are You sure you want to delete this todo :(")) {
       db.ref(`todos/${temp}`).remove((err) => {
         if (err) {
           console.log(err);
-        } else {
-          this.setState({ toDelete: "" });
-        }
+         } //else {
+        //   this.setState({ toDelete: "" });
+        // }
       });
+      window.setTimeout(() => {
+        window.location.reload();
+      });
+  
     }
-    window.setTimeout(() => {
-      window.location.reload();
-    });
+
+   
   }
 
   // onUpdateTodo(temp) {
@@ -41,27 +58,28 @@ export default class Todoitem extends Component {
   // }
 
   render() {
-  
+    const arr = this.props.todo.split(" ");
+    console.log(arr);
+    const le = arr.length;
+    let str = "";
+    for (let i = 0; i < le - 2; i++) {
+      str += arr[i] + " ";
+    }
+
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginTop: "50px",
-          fontFamily: "fantasy",
-        }}
-      >
-        <h1 style={{ textAlign: "left" }}>
+      <div style={{ display: "flex",}} >
+        <div style={style}>
+          <h1 style={{ textAlign: "left" }}>
+            {str}
+            </h1>
+            <h3>
+              <br />
+              {arr[le - 2]}
+            </h3>
+            <h3>{arr[le - 1]}</h3>
          
-          {this.props.todo}
-          <h3>
-            <br />
-            {this.props.date}
-          </h3>
-          <h3>{this.props.time}</h3>
-        </h1>
-        <div>
-          {/* <Button
+          {/* <div>
+            {/* <Button
             size="sm"
             className="hui"
             variant="primary"
@@ -72,18 +90,21 @@ export default class Todoitem extends Component {
           >
             Update
           </Button> */}
-
-          <Button
-            size="sm"
-            className="hui"
-            variant="primary"
-            onClick={() => {
-              this.onDeleteTodo(this.props.todoId);
-            }}
-          >
-            Delete
-          </Button>
+         
+          
+       
         </div>
+        <Button
+          size="lg"
+          className="button"
+          variant="primary"
+          onClick={() => {
+            this.onDeleteTodo(this.props.todoId);
+          }}
+        >
+          Delete
+        </Button>
+     
       </div>
     );
   }

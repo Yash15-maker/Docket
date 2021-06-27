@@ -11,16 +11,15 @@ const INITIAL_STATE = {
 
 let style = {
   border: "3.5px solid black",
-  position: "absolute",
-  zIndex: "1",
+  //position: "absolute",
+  // zIndex: "1",
   backgroundColor: "white",
-  borderRadius: "0 30px 30px 0",
-  marginTop: "50px",
+   marginTop: "50px",
   fontFamily: "fantasy",
   padding: "10px",
   overflowY: "scroll",
-  height: "15rem",
-  width: "70%",
+  height: "13rem",
+  width: "90%",
 };
 export default class Todoitem extends Component {
   state = { ...INITIAL_STATE };
@@ -78,17 +77,12 @@ export default class Todoitem extends Component {
     }
 
     return (
-      <div style={{ display: "flex" }}>
+      
         <div style={style}>
-          <h1 style={{ textAlign: "left" }}>{str}</h1>
-          <h3>
-            <br />
-            {arr[le - 2]}
-          </h3>
-          <h3>{arr[le - 1]}</h3>
-
-          <div>
-            <Button
+          <div style={{display: "flex",jsutifyContent:"end"}}>
+                      <h1 style={{ textAlign: "left",width: "50%" }}>{str}</h1>
+          <div style={{textAlign: "right",position: "relative",zIndex: "1"}}>
+          <Button
               size="sm"
               className="hui"
               variant="primary"
@@ -99,10 +93,10 @@ export default class Todoitem extends Component {
             >
               Update
             </Button>
-          </div>
-        </div>
+          
+        
         <Button
-          size="lg"
+          size="sm"
           className="button"
           variant="primary"
           onClick={() => {
@@ -111,6 +105,18 @@ export default class Todoitem extends Component {
         >
           Delete
         </Button>
+        </div>
+        </div>
+        
+        
+          <h3>
+            <br />
+            {arr[le - 2]}
+          </h3>
+          <h3>{arr[le - 1]}</h3>
+
+          
+      
       </div>
     );
   }

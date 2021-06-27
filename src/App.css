@@ -25,17 +25,17 @@ overflow-y: -1;
 ::-webkit-scrollbar-thumb:hover {
   background: lightgreen; 
 }
-.button{
-   height: 240px;
-  width: 300px;
+/* .button{
+   height: 50px;
+  width: 100px;
 margin-top: 50px;
 border-radius: 30px;
- /* margin-bottom: 35px;*/
+ /* margin-bottom: 35px;
 margin-left:70%;  
 text-align: right;
 padding-right: 5rem;
   text-orientation: upright;
   
 
-}
+} */
 

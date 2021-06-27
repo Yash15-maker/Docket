@@ -41,32 +41,31 @@ export default class Todoitem extends Component {
   }
 
   onUpdateTodo(temp) {
-    let ch = prompt("Enter updated todo", "Enter Todo Here");
-    const today = new Date();
-    const date =
-      today.getDate() +
-      "-" +
-      (today.getMonth() + 1) +
-      "-" +
-      today.getFullYear();
-    const time =
-      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      ch+=" "+date + " " + time;
-    if(ch){
-    var updates = {};
-    console.log(temp);
-    updates["todos/" + temp] = ch;
-    
+    let ch = prompt("Enter updated todo");
+    if (!ch?.trim()) {
+      alert("Please Enter Something :)");
+    } else {
+      const today = new Date();
+      const date =
+        today.getDate() +
+        "-" +
+        (today.getMonth() + 1) +
+        "-" +
+        today.getFullYear();
+      const time =
+        today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      ch += " " + date + " " + time;
 
-    db.ref().update(updates);
+      var updates = {};
+      console.log(temp);
+      updates["todos/" + temp] = ch;
 
-    window.setTimeout(() => {
-      window.location.reload();
-    });
-  }
-  else{
-    alert("Enter something ...");
-  }
+      db.ref().update(updates);
+
+      window.setTimeout(() => {
+        window.location.reload();
+      });
+    }
   }
 
   render() {

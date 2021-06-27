@@ -11,8 +11,8 @@ const INITIAL_STATE = {
 
 let style = {
   border: "3.5px solid black",
- position: "absolute",
- zIndex: "1",
+  position: "absolute",
+  zIndex: "1",
   backgroundColor: "white",
   borderRadius: "0 30px 30px 0",
   marginTop: "50px",
@@ -21,41 +21,53 @@ let style = {
   overflowY: "scroll",
   height: "15rem",
   width: "70%",
-  
 };
 export default class Todoitem extends Component {
   state = { ...INITIAL_STATE };
 
   onDeleteTodo(temp) {
-    
     if (window.confirm("Are You sure you want to delete this todo :(")) {
       db.ref(`todos/${temp}`).remove((err) => {
         if (err) {
           console.log(err);
-         } //else {
+        } //else {
         //   this.setState({ toDelete: "" });
         // }
       });
       window.setTimeout(() => {
         window.location.reload();
       });
-  
     }
-
-   
   }
 
-  // onUpdateTodo(temp) {
-  //   const ch=this.props.curr;
-  //   console.log(temp);
-  //   db.ref(`todos`).update(
-  //     {ch: prompt("Enter updated todo", "Enter Todo Here")}
-  //   );
+  onUpdateTodo(temp) {
+    let ch = prompt("Enter updated todo", "Enter Todo Here");
+    const today = new Date();
+    const date =
+      today.getDate() +
+      "-" +
+      (today.getMonth() + 1) +
+      "-" +
+      today.getFullYear();
+    const time =
+      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      ch+=" "+date + " " + time;
+    if(ch){
+    var updates = {};
+    console.log(temp);
+    updates["todos/" + temp] = ch;
+    
 
-  //   window.setTimeout(() => {
-  //     window.location.reload();
-  //   });
-  // }
+    db.ref().update(updates);
+
+    window.setTimeout(() => {
+      window.location.reload();
+    });
+  }
+  else{
+    alert("Enter something ...");
+  }
+  }
 
   render() {
     const arr = this.props.todo.split(" ");
@@ -67,32 +79,28 @@ export default class Todoitem extends Component {
     }
 
     return (
-      <div style={{ display: "flex",}} >
+      <div style={{ display: "flex" }}>
         <div style={style}>
-          <h1 style={{ textAlign: "left" }}>
-            {str}
-            </h1>
-            <h3>
-              <br />
-              {arr[le - 2]}
-            </h3>
-            <h3>{arr[le - 1]}</h3>
-         
-          {/* <div>
-            {/* <Button
-            size="sm"
-            className="hui"
-            variant="primary"
-            style={{ marginRight: "10px" }}
-            onClick={() => {
-              this.onUpdateTodo(this.props.todoId);
-            }}
-          >
-            Update
-          </Button> */}
-         
-          
-       
+          <h1 style={{ textAlign: "left" }}>{str}</h1>
+          <h3>
+            <br />
+            {arr[le - 2]}
+          </h3>
+          <h3>{arr[le - 1]}</h3>
+
+          <div>
+            <Button
+              size="sm"
+              className="hui"
+              variant="primary"
+              style={{ marginRight: "10px" }}
+              onClick={() => {
+                this.onUpdateTodo(this.props.todoId);
+              }}
+            >
+              Update
+            </Button>
+          </div>
         </div>
         <Button
           size="lg"
@@ -104,7 +112,6 @@ export default class Todoitem extends Component {
         >
           Delete
         </Button>
-     
       </div>
     );
   }

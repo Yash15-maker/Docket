@@ -9,7 +9,7 @@ const INITIAL_STATE = {
   date: "",
   time: "",
   meassage: "",
-
+  prevdata: [],
 };
 
 class Todos extends React.Component {
@@ -17,45 +17,78 @@ class Todos extends React.Component {
 
   submitTodo = (event) => {
     const { currentTodo } = this.state;
-    if(currentTodo.trim()==="")
-    {
-alert("Please Enter your todo")
-this.setState({ currentTodo: "" });
+    if (currentTodo.trim() === "") {
+      alert("Please Enter your todo");
+      this.setState({ currentTodo: "" });
+    } else {
+      const today = new Date();
+      const date =
+        today.getDate() +
+        "-" +
+        (today.getMonth() + 1) +
+        "-" +
+        today.getFullYear();
+      var hours =
+        today.getHours().length === 1
+          ? "0" + today.getHours()
+          : today.getHours();
+      var minutes =
+        today.getMinutes().length === 1
+          ? "0" + today.getMinutes()
+          : today.getMinutes();
+      var seconds =
+        today.getSeconds().length === 1
+          ? "0" + today.getSeconds()
+          : today.getSeconds();
+      var time = hours + ":" + minutes + ":" + seconds;
+      db.ref("todos")
+        .push()
+        .set(currentTodo + " " + date + " " + time)
+        .then(
+          console.log("Data succesfully written to database"),
+          db
+            .ref("todos")
+            .get()
+            .then((snapshot) => {
+              if (snapshot.exists()) {
+                this.setState({
+                  todos: Object.entries(snapshot.val()).reverse(),
+                });
+                this.setState({ currentTodo: "" });
+                console.log(Object.entries(snapshot.val()).reverse());
+              } else {
+                console.log("No data available");
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            })
+        )
+        .catch((error) => {
+          console.error(error);
+        });
     }
-else{
-    const today = new Date();
-    const date =
-      today.getDate() +
-      "-" +
-      (today.getMonth() + 1) +
-      "-" +
-      today.getFullYear();
-    var time =
-      today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    db.ref("todos")
-      .push()
-      .set(currentTodo + " " + date + " " + time)
-      .then(console.log("Data succesfully written to database"))
-      .catch((error) => {
-        console.error(error);
-      });
-
-    window.setTimeout(() => {
-      window.location.reload();
-    });
-   
-
-    
-  }
-  event.preventDefault();
+    event.preventDefault();
   };
+
+  onDeleteTodo(temp) {
+    if (window.confirm("Are You sure you want to delete this todo :(")) {
+      db.ref(`todos/${temp}`).remove((err) => {
+        if (err) {
+          console.log(err);
+        }
+      });
+    }
+  }
 
   componentWillMount() {
     db.ref("todos")
       .get()
       .then((snapshot) => {
         if (snapshot.exists()) {
-          this.setState({ todos: Object.entries(snapshot.val()).reverse() });
+          this.setState({
+            todos: Object.entries(snapshot.val()).reverse(),
+          });
           console.log(Object.entries(snapshot.val()).reverse());
         } else {
           console.log("No data available");
@@ -64,12 +97,31 @@ else{
       .catch((error) => {
         console.error(error);
       });
-    this.setState({ loaded: true });
+  }
+
+  componentDidUpdate() {
+    db.ref("todos")
+      .get()
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          this.todos.length!==0?
+          this.setState({
+            todos: Object.entries(snapshot.val()).reverse(),
+          }):this.setState({
+            todos: []
+          });
+          console.log(Object.entries(snapshot.val()).reverse());
+        } else {
+          console.log("No data available");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   render() {
     const { currentTodo, todos } = this.state;
-   
 
     return (
       <center
@@ -104,7 +156,7 @@ else{
           </Form>
 
           <div className="container">
-            {todos.map((thistodo) => {
+            {todos.length!==0?todos.map((thistodo) => {
               return (
                 <div>
                   {
@@ -113,11 +165,12 @@ else{
                       todoId={thistodo[0]}
                       date={this.state.date}
                       time={this.state.time}
+                      onDeleteTodo={this.onDeleteTodo}
                     />
                   }
                 </div>
               );
-            })}
+            }):<>{" "}</>}
           </div>
         </div>
       </center>

@@ -7,6 +7,7 @@ const INITIAL_STATE = {
   date: "",
   time: "",
   message: "",
+  
 };
 
 let style = {
@@ -14,7 +15,7 @@ let style = {
   //position: "absolute",
   // zIndex: "1",
   backgroundColor: "white",
-   marginTop: "50px",
+  marginTop: "50px",
   fontFamily: "fantasy",
   padding: "10px",
   overflowY: "scroll",
@@ -24,21 +25,7 @@ let style = {
 export default class Todoitem extends Component {
   state = { ...INITIAL_STATE };
 
-  onDeleteTodo(temp) {
-    if (window.confirm("Are You sure you want to delete this todo :(")) {
-      db.ref(`todos/${temp}`).remove((err) => {
-        if (err) {
-          console.log(err);
-        } //else {
-        //   this.setState({ toDelete: "" });
-        // }
-      });
-      window.setTimeout(() => {
-        window.location.reload();
-      });
-    }
-  }
-
+  
   onUpdateTodo(temp) {
     let ch = prompt("Enter updated todo");
     if (!ch?.trim()) {
@@ -61,9 +48,7 @@ export default class Todoitem extends Component {
 
       db.ref().update(updates);
 
-      window.setTimeout(() => {
-        window.location.reload();
-      });
+      window.location.reload();
     }
   }
 
@@ -77,12 +62,13 @@ export default class Todoitem extends Component {
     }
 
     return (
-      
-        <div style={style}>
-          <div style={{display: "flex",jsutifyContent:"end"}}>
-                      <h1 style={{ textAlign: "left",width: "50%" }}>{str}</h1>
-          <div style={{textAlign: "right",position: "relative",zIndex: "1"}}>
-          <Button
+      <div style={style}>
+        <div style={{ display: "flex", jsutifyContent: "end" }}>
+          <h1 style={{ textAlign: "left", width: "50%" }}>{str}</h1>
+          <div
+            style={{ textAlign: "right", position: "relative", zIndex: "1" }}
+          >
+            <Button
               size="sm"
               className="hui"
               variant="primary"
@@ -93,30 +79,25 @@ export default class Todoitem extends Component {
             >
               Update
             </Button>
-          
-        
-        <Button
-          size="sm"
-          className="button"
-          variant="primary"
-          onClick={() => {
-            this.onDeleteTodo(this.props.todoId);
-          }}
-        >
-          Delete
-        </Button>
-        </div>
-        </div>
-        
-        
-          <h3>
-            <br />
-            {arr[le - 2]}
-          </h3>
-          <h3>{arr[le - 1]}</h3>
 
-          
-      
+            <Button
+              size="sm"
+              className="button"
+              variant="primary"
+              onClick={() => {
+                this.props.onDeleteTodo(this.props.todoId);
+              }}
+            >
+              Delete
+            </Button>
+          </div>
+        </div>
+
+        <h3>
+          <br />
+          {arr[le - 2]}
+        </h3>
+        <h3>{arr[le - 1]}</h3>
       </div>
     );
   }

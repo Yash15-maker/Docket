@@ -5,9 +5,8 @@ This app is a simple Web  application  to manage task to do with a title and a t
 ## How to use the application
 
 On your first use, this is what you will see :
+<img width="962" alt="image" src="https://user-images.githubusercontent.com/64361746/147966840-fed95ce6-d9c1-4431-a55a-9de61abe56e7.png">
 
-[[](<img](url) width="900" alt="image" src="https://user-images.githubusercontent.com/64361746/147965487-aa20385b-de4d-4f3c-9964-8e5f6e9fb771.png">
-)
 
 Then click on the button ``Add Todo``.
 

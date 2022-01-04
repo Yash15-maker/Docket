@@ -39,5 +39,6 @@ To build the project, run :
 
 ```bash
 npm install
+npm start
 npm build
 ```
